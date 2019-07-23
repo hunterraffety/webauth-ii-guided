@@ -43,8 +43,12 @@ router.get('/logout', (req, res) => {
     req.session.destroy(error => {
       if (error) {
         res.status(500).json({ message: 'Having trouble logging you out.' });
+      } else {
+        res.status(200).json({ message: 'Logged out.' });
       }
     });
+  } else {
+    res.status(200).json({ message: 'Already logged out.' });
   }
 });
 

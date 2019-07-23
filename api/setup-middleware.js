@@ -1,7 +1,8 @@
 const cors = require('cors');
 const express = require('express');
-const session = require('express-session');
 const helmet = require('helmet');
+const session = require('express-session');
+const KnexSessionStore = require('connect-session-knex')(session);
 
 module.exports = server => {
   // session config object. keep hidden irl.
@@ -14,7 +15,14 @@ module.exports = server => {
       httpOnly: true // js can't access the cookie on the client
     },
     resave: false, // save the session again even if it didn't change
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new KnexSessionStore({
+      knex: require('../database/dbConfig.js'),
+      tablename: 'sessions',
+      createtable: true,
+      sidfieldname: 'sid',
+      clearInterval: 1000 * 60 * 60 // deletes expired sessions every hour
+    })
   };
 
   server.use(helmet());
