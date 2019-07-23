@@ -38,4 +38,14 @@ router.post('/login', (req, res) => {
     });
 });
 
+router.get('/logout', (req, res) => {
+  if (req.session) {
+    req.session.destroy(error => {
+      if (error) {
+        res.status(500).json({ message: 'Having trouble logging you out.' });
+      }
+    });
+  }
+});
+
 module.exports = router;
