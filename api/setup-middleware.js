@@ -2,13 +2,13 @@ const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
 const session = require('express-session');
-const KnexSessionStore = require('connect-session-knex')(session);
+const KnexSessionStore = require('connect-session-knex')(session); // pass session with currying
 
 module.exports = server => {
   // session config object. keep hidden irl.
   const sessionConfig = {
     name: 'mordor',
-    secret: 'keep it secret, keep it safe',
+    secret: process.env.SESSION_SECRET || 'keep it secret, keep it safe',
     cookie: {
       maxAge: 1000 * 60 * 10, // milliseconds,
       secure: false, // true in production, only https for cookies,
